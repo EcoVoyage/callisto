@@ -1,0 +1,37 @@
+services:
+  micromamba:
+    build:
+      context: micromamba
+    image: callisto-micromamba:latest
+
+  docker:
+    build:
+      context: docker
+    image: callisto-docker:latest
+    depends_on:
+      - micromamba
+
+
+  graphhopper:
+    build:
+      context: graphhopper
+    image: graphhopper-micromamba:latest    
+    volumes:
+    - .:/workspace:cached
+    - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      DOCKER_HOST: unix:///var/run/docker.sock
+
+  jupyterhub:
+    build:
+      context: jupyterhub
+    image: graphhopper-micromamba:latest 
+    volumes:
+    - .:/workspace:cached
+    - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      DOCKER_HOST: unix:///var/run/docker.sock
+      JUPYTERHUB_ADMIN_PASSWORD: "MyPassMy"
+    ports:
+      - "8000:8000"
+    restart: unless-stopped

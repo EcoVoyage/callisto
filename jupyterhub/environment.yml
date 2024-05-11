@@ -1,0 +1,11 @@
+name: base
+channels:
+  - conda-forge
+dependencies:
+  - python
+  - pip
+  - nodejs
+  - yarn
+  - configurable-http-proxy
+  - hatchling
+ 

@@ -38,6 +38,8 @@ RUN groupadd -g "${MAMBA_USER_GID}" "${MAMBA_USER}" && \
     useradd -m -u "${MAMBA_USER_ID}" -g "${MAMBA_USER_GID}" -s /bin/bash "${MAMBA_USER}"
 RUN mkdir -p "${MAMBA_ROOT_PREFIX}/environments" && \
     chown "${MAMBA_USER}:${MAMBA_USER}" "${MAMBA_ROOT_PREFIX}"
+RUN mkdir -p /code && chown -R $MAMBA_USER:$MAMBA_USER /code
+RUN mkdir -p /data && chown -R $MAMBA_USER:$MAMBA_USER /data
 
 ARG CONTAINER_WORKSPACE_FOLDER=/workspace
 RUN mkdir -p "${CONTAINER_WORKSPACE_FOLDER}"

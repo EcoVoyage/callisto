@@ -15,7 +15,7 @@ services:
   graphhopper:
     build:
       context: graphhopper
-    image: graphhopper-micromamba:latest    
+    image: callisto-graphhopper:latest    
     volumes:
     - .:/workspace:cached
     - /var/run/docker.sock:/var/run/docker.sock
@@ -25,7 +25,9 @@ services:
   jupyterhub:
     build:
       context: jupyterhub
-    image: graphhopper-micromamba:latest 
+    image: callisto-jupyterhub:latest 
+    depends_on:
+      - micromamba
     volumes:
     - .:/workspace:cached
     - /var/run/docker.sock:/var/run/docker.sock

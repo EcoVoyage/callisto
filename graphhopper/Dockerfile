@@ -54,7 +54,7 @@ RUN micromamba shell init --shell bash --prefix=$MAMBA_ROOT_PREFIX
 SHELL ["/bin/bash", "--rcfile", "/$MAMBA_USER/.bashrc", "-c"]
 
 COPY --chown=$MAMBA_USER:$MAMBA_USER environment.yml /opt/conda/environments/environment.yml
-RUN --mount=type=cache,target=/home/jovian/pkgs,id=mamba-graphhopper micromamba install -y --override-channels -c conda-forge -n base -f /opt/conda/environments/environment.yml
+RUN --mount=type=cache,target=/home/admin/pkgs,id=mamba-graphhopper micromamba install -y --override-channels -c conda-forge -n base -f /opt/conda/environments/environment.yml
 
 USER root
 

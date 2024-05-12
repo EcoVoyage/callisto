@@ -8,4 +8,9 @@ dependencies:
   - yarn
   - configurable-http-proxy
   - hatchling
+  - jupyterhub
+  - jupyterlab
+  - dockerspawner
+  - jupyterhub-idle-culler
+
  

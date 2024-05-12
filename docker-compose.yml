@@ -2,38 +2,70 @@ services:
   micromamba:
     build:
       context: micromamba
-    image: callisto-micromamba:latest
+      args:
+        - BASE_IMAGE=debian:bookworm-slim
+        - MAMBA_USER=admin
+        - MAMBA_USER_ID=1000
+        - MAMBA_USER_GID=1000
+    image: ecovoyage/micromamba:20250501
+    networks:
+      - callisto
 
   docker:
     build:
       context: docker
-    image: callisto-docker:latest
+      args:
+        - BASE_IMAGE=ecovoyage/micromamba:20250501
+    image: ecovoyage/docker:20250501
+    networks:
+      - callisto
     depends_on:
       - micromamba
-
 
   graphhopper:
     build:
       context: graphhopper
-    image: callisto-graphhopper:latest    
+      args:
+        - BASE_IMAGE=debian:bookworm-slim
+        - MAMBA_USER=admin
+        - MAMBA_USER_ID=1000
+        - MAMBA_USER_GID=1000
+    image: ecovoyage/graphhopper:20250501  
     volumes:
     - .:/workspace:cached
     - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - callisto
     environment:
       DOCKER_HOST: unix:///var/run/docker.sock
 
   jupyterhub:
     build:
       context: jupyterhub
-    image: callisto-jupyterhub:latest 
+      args:
+        - ADMIN_USER=admin
+        - ADMIN_GROUP=admin
+        - ADMIN_PASSWORD=MyPassMy
+        - ADMIN_UID=1000
+        - ADMIN_GID=1000
+    image: ecovoyage/jupyterhub:20250501
     depends_on:
       - micromamba
     volumes:
     - .:/workspace:cached
     - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - callisto
     environment:
       DOCKER_HOST: unix:///var/run/docker.sock
-      JUPYTERHUB_ADMIN_PASSWORD: "MyPassMy"
+      DOCKER_JUPYTER_IMAGE: jupyterlab_img
+      DOCKER_NETWORK_NAME: ${COMPOSE_PROJECT_NAME}_default
     ports:
       - "8000:8000"
-    restart: unless-stopped
+    restart: on-failure
+
+networks:
+  callisto:
+    name: callisto
+    driver: bridge
+    attachable: true    

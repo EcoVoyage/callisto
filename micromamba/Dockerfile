@@ -2,7 +2,7 @@
 
 ARG BASE_IMAGE=debian:bookworm-slim
 FROM --platform=$BUILDPLATFORM $BASE_IMAGE AS fetch
-ARG VERSION=1.5.3
+ARG VERSION=1.5.8
 
 RUN --mount=type=cache,target=/var/cache/apt,id=apt-micromamba-fetch apt-get update && apt-get install -y --no-install-recommends bzip2 ca-certificates curl
 RUN if [ "$BUILDPLATFORM" = 'linux/arm64' ]; then \
@@ -26,7 +26,7 @@ ENV PATH="${PATH}:${MAMBA_ROOT_PREFIX}/bin"
 COPY --from=fetch /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 COPY --from=fetch /tmp/bin/micromamba "$MAMBA_EXE"
 
-ARG MAMBA_USER=jovian
+ARG MAMBA_USER=admin
 ARG MAMBA_USER_ID=1000
 ARG MAMBA_USER_GID=1000
 

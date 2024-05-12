@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.2
 
-ARG BASE_IMAGE=callisto-micromamba
+ARG BASE_IMAGE=ecovoyage/micromamba:latest
 FROM --platform=$BUILDPLATFORM $BASE_IMAGE AS fetch
 
 USER root

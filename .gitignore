@@ -161,3 +161,8 @@ cython_debug/
 
 # Data
 data/
+
+# JupyterHub
+jupyterhub_cookie_secret
+jupyterhub-proxy.pid
+jupyterhub.sqlite*

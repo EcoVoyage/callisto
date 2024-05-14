@@ -1,5 +1,4 @@
 #!/bin/bash
-#!/bin/bash
 
 # Network name
 NETWORK_NAME="callisto"

@@ -16,7 +16,7 @@ RUN if [ "$BUILDPLATFORM" = 'linux/arm64' ]; then \
   tar -xj -C "/tmp" "bin/micromamba"
 
 
-FROM --platform=$BUILDPLATFORM $BASE_IMAGE as micromamba
+FROM --platform=$BUILDPLATFORM $BASE_IMAGE as graphhopper
 
 ARG MAMBA_ROOT_PREFIX="/opt/conda"
 ARG MAMBA_EXE="/bin/micromamba"

@@ -22,6 +22,49 @@ services:
     depends_on:
       - micromamba
 
+  java:
+    build:
+      context: java
+      args:
+        - BASE_IMAGE=ecovoyage/docker:20250501
+        - MAMBA_USER=admin
+        - MAMBA_USER_ID=1000
+        - MAMBA_USER_GID=1000
+    image: ecovoyage/java:20250501
+    networks:
+      - callisto
+
+  planetiler:
+    build:
+      context: planetiler
+      args:
+        - BASE_IMAGE=ecovoyage/java:20250501
+    image: ecovoyage/planetiler:20250501
+    volumes:
+    - .:/workspace:cached
+    - /var/run/docker.sock:/var/run/docker.sock
+    - ./data/osm:/data
+  
+    networks:
+      - callisto
+
+  osmtools:
+    build:
+      context: osmtools
+      args:
+        - BASE_IMAGE=ecovoyage/docker:20250501
+        - MAMBA_USER=admin
+        - MAMBA_USER_ID=1000
+        - MAMBA_USER_GID=1000
+    image: ecovoyage/osmtools:20250501  
+    volumes:
+    - .:/workspace:cached
+    - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - callisto
+    environment:
+      DOCKER_HOST: unix:///var/run/docker.sock
+
   graphhopper:
     build:
       context: graphhopper
@@ -43,6 +86,7 @@ services:
     build:
       context: jupyterhub
       args:
+        - BASE_IMAGE=ecovoyage/docker:20250501
         - ADMIN_USER=admin
         - ADMIN_GROUP=admin
         - ADMIN_PASSWORD=MyPassMy
@@ -53,6 +97,7 @@ services:
       - micromamba
     volumes:
     - .:/workspace:cached
+    - ./data/osm:/data
     - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - callisto
@@ -63,6 +108,34 @@ services:
     ports:
       - "8000:8000"
     restart: on-failure
+
+
+  db:
+    image: postgis/postgis:16-3.4
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - callisto
+    restart: unless-stopped
+
+  tileserver:
+    image: maptiler/tileserver-gl
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./data/osm/planetiler:/data
+    depends_on:
+      - planetiler
+    networks:
+      - callisto
+    restart: unless-stopped
+
+volumes:
+  pgdata:
 
 networks:
   callisto:

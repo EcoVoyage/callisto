@@ -7,7 +7,7 @@ FROM --platform=$BUILDPLATFORM $BASE_IMAGE as jupyterhub
 USER root
 
 COPY --chown=$MAMBA_USER:$MAMBA_USER apt.txt /opt/conda/environments/apt.txt
-RUN --mount=type=cache,target=/var/cache/apt,id=apt-jupyterhub apt-get update && xargs apt-get install -y < /opt/conda/environments/apt.txt
+RUN --mount=type=cache,target=/var/cache/apt,id=apt-jupyter apt-get update && xargs apt-get install -y < /opt/conda/environments/apt.txt
 
 ARG ADMIN_USER=admin
 ARG ADMIN_GROUP=admin

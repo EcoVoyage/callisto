@@ -43,7 +43,8 @@ services:
     volumes:
     - .:/workspace:cached
     - /var/run/docker.sock:/var/run/docker.sock
-    - ./data/osm:/data
+    - ./data/planetiler:/data/planetiler
+    - ./data/osm:/data/osm
   
     networks:
       - callisto
@@ -127,7 +128,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./data/osm/planetiler:/data
+      - ./data/planetiler:/data
     depends_on:
       - planetiler
     networks:

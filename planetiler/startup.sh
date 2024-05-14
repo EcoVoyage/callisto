@@ -11,22 +11,8 @@
 #     echo "Sudo privileges are not available."
 # fi
 
-mkdir -p /data/planetiler
-cd /data/planetiler
-java -Xmx4g -jar /code/planetiler.jar  --download --area=austria --output austria.pmtiles
+java -Xmx4g -jar /code/planetiler.jar  --download True --download_dir=/data/osm --area=austria --output /data/planetiler/austria.pmtiles --osm-path=/data/osm/austria.osm.pbf
 
-
-# java -Xmx1g -jar /code/planetiler/target/planetiler-openmaptiles-0.7-SNAPSHOT.jar  --download --area=monaco
-
-# java -jar /code/planetiler/planetiler-core/target/planetiler-core-0.7-SNAPSHOT.jar \
-#   --input "austria-latest.osm.pbf" \
-#   --output "austria-latest.pmtiles" \
-#   --maxzoom 14 \
-#   --minzoom 0 \
-#   --bounds "bbox_of_austria" \
-#   --download \
-#   --optimize \
-#   --tile-format pmtiles
-
+# java -Xmx4g -jar /code/planetiler/planetiler-dist/target/planetiler-dist-0.7-SNAPSHOT-with-deps.jar  --download True --download_dir=/data/osm --area=austria --output /data/planetiler/austria.pmtiles --osm-path=/data/osm/austria.osm.pb
 
 sleep infinity
